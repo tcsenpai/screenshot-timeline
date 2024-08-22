@@ -110,5 +110,3 @@ This project is licensed under the MIT License.
 - Celery: https://docs.celeryproject.org/
 - OpenCV: https://opencv.org/
 - Material Design Components: https://material.io/develop/web
-
-(Add any other libraries or resources used in the project)
