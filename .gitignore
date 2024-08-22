@@ -17,3 +17,4 @@ __pycache__
 .env.development.local
 .env.test
 .env.test.local
+static/screenshots/screenshots_will_be_added_here

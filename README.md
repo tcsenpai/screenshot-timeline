@@ -1,5 +1,7 @@
 # Screenshot Timeline
 
+![Preview](preview.png)
+
 A work in progress privacy focused alternative to Microsoft Copilot and similar spyware.
 
 Screenshot Timeline is an automated screenshot capture and analysis tool that uses OCR to extract text from images and organize them with tags for easy searching and filtering.
@@ -88,8 +90,8 @@ We welcome contributions to the Screenshot Timeline project! If you'd like to co
 1. Fork the repository on GitHub.
 2. Create a new branch with a descriptive name for your feature or bug fix.
 3. Make your changes, ensuring you follow the project's coding style and conventions.
-4. Add or update tests as necessary to cover your changes.
-5. Ensure all tests pass by running the test suite.
+4. Document your changes
+5. Ensure all works by running the code on your machine
 6. Commit your changes with a clear and descriptive commit message.
 7. Push your branch to your fork on GitHub.
 8. Open a pull request against the main repository's `main` branch.
