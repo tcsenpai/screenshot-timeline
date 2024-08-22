@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screenshot Timeline</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="mdc-typography">
+    <header class="mdc-top-app-bar">
+        <div class="mdc-top-app-bar__row">
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+                <span class="mdc-top-app-bar__title">Screenshot Timeline</span>
+            </section>
+            <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+                <div class="tag-filter-container">
+                    <label for="tag-filter-select" class="tag-filter-label">Filter tags:</label>
+                    <div class="mdc-select mdc-select--outlined" id="tag-filter-select">
+                        <div class="mdc-select__anchor">
+                            <span class="mdc-select__ripple"></span>
+                            <span class="mdc-select__selected-text"></span>
+                            <span class="mdc-select__dropdown-icon">
+                                <svg class="mdc-select__dropdown-icon-graphic" viewBox="7 10 10 5">
+                                    <polygon class="mdc-select__dropdown-icon-inactive" stroke="none" fill-rule="evenodd" points="7 10 12 15 17 10"></polygon>
+                                    <polygon class="mdc-select__dropdown-icon-active" stroke="none" fill-rule="evenodd" points="7 15 12 10 17 15"></polygon>
+                                </svg>
+                            </span>
+                            <span class="mdc-notched-outline">
+                                <span class="mdc-notched-outline__leading"></span>
+                                <span class="mdc-notched-outline__trailing"></span>
+                            </span>
+                        </div>
+                        <div class="mdc-select__menu mdc-menu mdc-menu-surface mdc-menu-surface--fullwidth">
+                            <ul class="mdc-list" id="tag-filter-list">
+                                <li class="mdc-list-item mdc-list-item--selected" data-value="" aria-selected="true">
+                                    <span class="mdc-list-item__ripple"></span>
+                                    <span class="mdc-list-item__text">All</span>
+                                </li>
+                                <!-- Tags will be dynamically added here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </header>
+
+    <main class="mdc-top-app-bar--fixed-adjust">
+        <div class="content">
+            <div class="mdc-layout-grid">
+                <div class="mdc-layout-grid__inner">
+                    <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-12">
+                        <div class="mdc-text-field mdc-text-field--outlined mdc-text-field--with-trailing-icon" id="search-field">
+                            <input type="text" id="search-input" class="mdc-text-field__input">
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="search-input" class="mdc-floating-label">Search</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>   
+                            </div>
+                            <i class="material-icons mdc-text-field__icon mdc-text-field__icon--trailing" tabindex="0" role="button">search</i>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="spinner" class="mdc-circular-progress" style="display:none;" role="progressbar" aria-label="Example Progress Bar" aria-valuemin="0" aria-valuemax="1">
+                    <div class="mdc-circular-progress__determinate-container">
+                        <svg class="mdc-circular-progress__determinate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                            <circle class="mdc-circular-progress__determinate-track" cx="24" cy="24" r="18" stroke-width="4"/>
+                            <circle class="mdc-circular-progress__determinate-circle" cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="113.097" stroke-width="4"/>
+                        </svg>
+                    </div>
+                    <div class="mdc-circular-progress__indeterminate-container">
+                        <div class="mdc-circular-progress__spinner-layer">
+                            <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-left">
+                                <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-circular-progress__gap-patch">
+                                <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="3.2"/>
+                                </svg>
+                            </div>
+                            <div class="mdc-circular-progress__circle-clipper mdc-circular-progress__circle-right">
+                                <svg class="mdc-circular-progress__indeterminate-circle-graphic" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="24" cy="24" r="18" stroke-dasharray="113.097" stroke-dashoffset="56.549" stroke-width="4"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="search-results" class="search-results mdc-layout-grid"></div>
+
+                <div class="section-divider">
+                    <hr class="mdc-list-divider">
+                    <h2 class="mdc-typography--headline6">All Screenshots</h2>
+                </div>
+
+                <div class="screenshot-timeline">
+                    {% for screenshot in screenshots %}
+                    <div class="timeline-item">
+                        <div class="mdc-card screenshot-card" data-screenshot="{{ screenshot.filename }}">
+                            <div class="mdc-card__media mdc-card__media--16-9 screenshot-image" style="background-image: url('{{ url_for('static', filename='screenshots/' + screenshot.filename) }}');">
+                                <div class="screenshot-overlay">
+                                    <span class="material-icons">zoom_in</span>
+                                </div>
+                            </div>
+                            <div class="mdc-card__content">
+                                <h2 class="mdc-typography--headline6 screenshot-timestamp" data-timestamp="{{ screenshot.timestamp }}">{{ screenshot.formatted_timestamp }}</h2>
+                                <p class="mdc-typography--body2 screenshot-status {{ 'status-analyzed' if screenshot.ocr_status else 'status-not-analyzed' }}">
+                                    {{ 'Analyzed' if screenshot.ocr_status else 'Not yet analyzed' }}
+                                </p>
+                                <div class="screenshot-tags">
+                                    {% for tag in screenshot.tags %}
+                                        <span class="tag">{{ tag }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="mdc-card__actions">
+                                <button class="mdc-button mdc-card__action mdc-card__action--button edit-tags-button">
+                                    <span class="mdc-button__label">Edit Tags</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Screenshot Modal -->
+                <div id="screenshot-modal" class="modal">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="screenshot-modal-image">
+                </div>
+
+                <!-- Config Modal -->
+                <div id="config-modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>Configuration</h2>
+                        <button id="ocr-all-button" class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__label">OCR All Images</span>
+                        </button>
+                        <button id="delete-all-button" class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__label">Delete All Screenshots</span>
+                        </button>
+                        <button id="delete-all-and-db-button" class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__label">Delete All Screenshots and Reset Database</span>
+                        </button>
+                        <div class="mdc-text-field mdc-text-field--outlined">
+                            <input type="number" id="interval-input" class="mdc-text-field__input" value="300">
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__notch">
+                                    <label for="interval-input" class="mdc-floating-label">Screenshot Interval (seconds)</label>
+                                </div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </div>
+                        <button id="save-interval-button" class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__label">Save Interval</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="config-button" class="mdc-fab" aria-label="Config">
+                    <div class="mdc-fab__ripple"></div>
+                    <span class="mdc-fab__icon material-icons">settings</span>
+                </button>
+
+                <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <!-- Add this modal HTML at the end of your body tag -->
+    <div id="edit-tags-modal" class="modal">
+        <div class="modal-content">
+            <h2>Edit Tags</h2>
+            <input type="text" id="tags-input" placeholder="Enter tags, separated by commas">
+            <button id="save-tags-button" class="mdc-button mdc-button--raised">
+                <span class="mdc-button__label">Save Tags</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

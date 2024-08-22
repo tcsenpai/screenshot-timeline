@@ -1,0 +1,6 @@
+flask
+pillow
+pytesseract
+nltk
+celery
+redis
